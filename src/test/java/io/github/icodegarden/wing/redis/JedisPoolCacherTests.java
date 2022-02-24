@@ -25,7 +25,7 @@ public class JedisPoolCacherTests extends RedisCacherTests {
 	}
 	
 	public static JedisPool newJedisPool() {
-		JedisPool jedisPool = new JedisPool(new GenericObjectPoolConfig(),"172.22.122.23",6399,2000,null);
+		JedisPool jedisPool = new JedisPool(new GenericObjectPoolConfig(),"172.22.122.23",6399,10000,null);
 		return jedisPool;
 	}
 }

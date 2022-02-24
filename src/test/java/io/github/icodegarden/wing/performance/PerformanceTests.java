@@ -88,7 +88,12 @@ public abstract class PerformanceTests {
 				new Thread() {
 					public void run() {
 						for (int i = 0; i < loop / threads; i++) {
-							cacher.get(key);
+							try{
+								cacher.get(key);
+							} catch (Exception e) {
+								e.printStackTrace();
+								System.exit(-1);
+							}
 						}
 						countDownLatch.countDown();
 					}
