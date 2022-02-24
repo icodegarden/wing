@@ -1,0 +1,111 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>io.github.icodegarden</groupId>
+	<artifactId>wing</artifactId>
+	<version>0.0.1</version>
+	<packaging>jar</packaging>
+
+	<name>${project.artifactId}}</name>
+
+	<properties>
+        <java.version>1.8</java.version>
+        <commons-version>0.0.3</commons-version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>io.github.icodegarden</groupId>
+			<artifactId>commons-nio-java</artifactId>
+			<version>${commons-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+<!-- 			<version>3.6.1</version> -->
+			<version>3.8.0</version>
+			<optional>true</optional><!-- 同步通讯方式是可选的，用户自己选择一种 -->
+		</dependency>
+		<dependency>
+            <groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+<!-- 			<version>2.5.2</version> -->
+			<version>2.6.2</version><!-- 不能兼容jedis 4.0以上，因为内部依赖的GeoUnit类的package是不同的 -->
+            <optional>true</optional><!-- 同步通讯方式是可选的，用户自己选择一种 -->
+        </dependency>
+        <dependency>
+		    <groupId>org.apache.kafka</groupId>
+		    <artifactId>kafka-clients</artifactId>
+<!-- 		    <version>2.2.0</version> -->
+		    <version>3.1.0</version><!-- 可以兼容server 2.2.0 -->
+		    <optional>true</optional><!-- 同步通讯方式是可选的，用户自己选择一种 -->
+		</dependency>
+		
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.3</version>
+			<optional>true</optional><!-- log的实现是可选的 -->
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>3.8.0</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	
+	<dependencyManagement>
+		<dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.7.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
