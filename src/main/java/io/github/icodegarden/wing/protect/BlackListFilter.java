@@ -11,16 +11,16 @@ import io.github.icodegarden.wing.common.RejectedRequestException;
  */
 public class BlackListFilter extends ShouldFilter {
 
-	private final Collection<String> list;
+	private final Collection<String> blacks;
 
-	public BlackListFilter(Collection<String> list, Predicate<String> shouldFilter) {
+	public BlackListFilter(Collection<String> blacks, Predicate<String> shouldFilter) {
 		super(shouldFilter);
-		this.list = list;
+		this.blacks = blacks;
 	}
 
 	@Override
 	protected void shouldDoFilter(String key) throws RejectedRequestException {
-		if (list.contains(key)) {
+		if (blacks.contains(key)) {
 			throw new RejectedRequestException(this, "request key:" + key + " reject by black list");
 		}
 	}

@@ -11,16 +11,16 @@ import io.github.icodegarden.wing.common.RejectedRequestException;
  */
 public class WhiteListFilter extends ShouldFilter {
 
-	private final Collection<String> list;
+	private final Collection<String> whites;
 
-	public WhiteListFilter(Collection<String> list, Predicate<String> shouldFilter) {
+	public WhiteListFilter(Collection<String> whites, Predicate<String> shouldFilter) {
 		super(shouldFilter);
-		this.list = list;
+		this.whites = whites;
 	}
 
 	@Override
 	protected void shouldDoFilter(String key) throws RejectedRequestException {
-		if (!list.contains(key)) {
+		if (!whites.contains(key)) {
 			throw new RejectedRequestException(this, "request key:" + key + " reject by white list");
 		}
 	}
