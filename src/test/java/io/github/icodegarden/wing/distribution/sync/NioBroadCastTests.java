@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import io.github.icodegarden.commons.lang.util.OSUtils;
+import io.github.icodegarden.commons.lang.util.SystemUtils;
 import io.github.icodegarden.wing.distribution.sync.AbstractDistributionSyncStrategy;
 import io.github.icodegarden.wing.distribution.sync.Discovery;
 import io.github.icodegarden.wing.distribution.sync.NioBroadcast;
@@ -26,7 +26,7 @@ public class NioBroadCastTests extends DistributionSyncStrategyTests {
 	protected AbstractDistributionSyncStrategy newInstance() {
 		final int port = serverPort++;
 
-		Discovery discovery = new Discovery("applicationName", OSUtils.getIp()/* 不能用127.0.0.1 */, port);
+		Discovery discovery = new Discovery("applicationName", SystemUtils.getIp()/* 不能用127.0.0.1 */, port);
 
 		discoverys.add(discovery);
 

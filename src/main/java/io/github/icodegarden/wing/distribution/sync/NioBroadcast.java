@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.github.icodegarden.commons.lang.util.OSUtils;
-import io.github.icodegarden.commons.lang.util.ThreadPools;
+import io.github.icodegarden.commons.lang.util.SystemUtils;
+import io.github.icodegarden.commons.lang.util.ThreadPoolUtils;
 import io.github.icodegarden.commons.nio.MessageHandler;
 import io.github.icodegarden.commons.nio.NioClient;
 import io.github.icodegarden.commons.nio.java.ClientNioSelector;
@@ -34,10 +34,10 @@ public class NioBroadcast extends AbstractDistributionSyncStrategy {
 
 	private static final Logger log = LoggerFactory.getLogger(NioBroadcast.class);
 	
-	private final ScheduledThreadPoolExecutor scheduleClearOfflineThreadPool = ThreadPools
-			.singleScheduledThreadPool("Schedule-Clear-Offline");
+	private final ScheduledThreadPoolExecutor scheduleClearOfflineThreadPool = ThreadPoolUtils
+			.newSingleScheduledThreadPool("Schedule-Clear-Offline");
 
-	private static final String IP = OSUtils.getIp();/* 对外网络ip */
+	private static final String IP = SystemUtils.getIp();/* 对外网络ip */
 	private final ClientNioSelector clientNioSelector;
 	private final int serverPort;
 

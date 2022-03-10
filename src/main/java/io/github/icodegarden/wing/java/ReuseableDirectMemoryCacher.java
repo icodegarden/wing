@@ -22,7 +22,7 @@ import io.github.icodegarden.commons.lang.serialization.Deserializer;
 import io.github.icodegarden.commons.lang.serialization.JavaDeserializer;
 import io.github.icodegarden.commons.lang.serialization.JavaSerializer;
 import io.github.icodegarden.commons.lang.serialization.Serializer;
-import io.github.icodegarden.commons.lang.util.ThreadPools;
+import io.github.icodegarden.commons.lang.util.ThreadPoolUtils;
 import io.github.icodegarden.wing.common.ArgumentException;
 
 /**
@@ -35,8 +35,8 @@ public class ReuseableDirectMemoryCacher extends DirectMemoryCacher {
 
 	private static Logger log = LoggerFactory.getLogger(ReuseableDirectMemoryCacher.class);
 
-	private final ScheduledThreadPoolExecutor clearIdlesThreadPool = ThreadPools
-			.singleScheduledThreadPool("clearIdles");
+	private final ScheduledThreadPoolExecutor clearIdlesThreadPool = ThreadPoolUtils
+			.newSingleScheduledThreadPool("clearIdles");
 
 	private Map<String, Memory> map = new ConcurrentHashMap<String, Memory>();
 	/**

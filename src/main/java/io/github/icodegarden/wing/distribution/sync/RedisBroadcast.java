@@ -10,7 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import io.github.icodegarden.commons.lang.serialization.KryoDeserializer;
 import io.github.icodegarden.commons.lang.serialization.KryoSerializer;
-import io.github.icodegarden.commons.lang.util.ThreadPools;
+import io.github.icodegarden.commons.lang.util.ThreadPoolUtils;
 import io.github.icodegarden.wing.common.Charsets;
 import io.github.icodegarden.wing.common.EnvException;
 import io.github.icodegarden.wing.common.SyncFailedException;
@@ -33,8 +33,8 @@ public class RedisBroadcast extends AbstractDistributionSyncStrategy {
 
 	private static final Logger log = LoggerFactory.getLogger(RedisBroadcast.class);
 
-	private final ScheduledThreadPoolExecutor scheduleCheckSubscribeThreadPool = ThreadPools
-			.singleScheduledThreadPool("Schedule-Check-Subscribe");
+	private final ScheduledThreadPoolExecutor scheduleCheckSubscribeThreadPool = ThreadPoolUtils
+			.newSingleScheduledThreadPool("Schedule-Check-Subscribe");
 
 //	private static final byte[] SUB_CHANNEL = "io.cahce.sync".getBytes(Charsets.UTF8);
 

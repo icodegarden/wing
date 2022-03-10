@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.github.icodegarden.commons.lang.util.ThreadPools;
+import io.github.icodegarden.commons.lang.util.ThreadPoolUtils;
 
 /**
  * 
@@ -23,8 +23,8 @@ import io.github.icodegarden.commons.lang.util.ThreadPools;
 public class KeyMetrics {
 	private static final Logger log = LoggerFactory.getLogger(KeyMetrics.class);
 
-	private final ScheduledThreadPoolExecutor metricsThreadPool = ThreadPools
-			.singleScheduledThreadPool("metrics");
+	private final ScheduledThreadPoolExecutor metricsThreadPool = ThreadPoolUtils
+			.newSingleScheduledThreadPool("metrics");
 	
 	private final Map<String, KeyOf> metrics = new ConcurrentHashMap<String, KeyOf>(64);
 	private long usedTimesAvg;

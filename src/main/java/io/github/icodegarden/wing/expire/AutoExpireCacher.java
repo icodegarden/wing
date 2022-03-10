@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.github.icodegarden.commons.lang.concurrent.NamedThreadFactory;
 import io.github.icodegarden.commons.lang.tuple.Tuple3;
-import io.github.icodegarden.commons.lang.util.NamedThreadFactory;
-import io.github.icodegarden.commons.lang.util.ThreadPools;
+import io.github.icodegarden.commons.lang.util.ThreadPoolUtils;
 import io.github.icodegarden.wing.Cacher;
 import io.github.icodegarden.wing.metrics.MetricsCacher;
 
@@ -25,8 +25,8 @@ public class AutoExpireCacher extends MetricsCacher {
 	
 	private static Logger log = LoggerFactory.getLogger(AutoExpireCacher.class);
 
-	private static final ScheduledThreadPoolExecutor REMOVE_EXPIRES_THREADPOOL = ThreadPools
-			.singleScheduledThreadPool("removeExpires");
+	private static final ScheduledThreadPoolExecutor REMOVE_EXPIRES_THREADPOOL = ThreadPoolUtils
+			.newSingleScheduledThreadPool("removeExpires");
 	
 	private static final int DEFAULT_SCAN_PERIOD_SECONDS = 10;
 	private static final NamedThreadFactory CACHE_AUTO_EXPIRE_THREADFACTORY = new NamedThreadFactory(
