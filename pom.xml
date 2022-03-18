@@ -10,7 +10,7 @@
 
 	<name>${project.artifactId}}</name>
 
-	<description></description>
+	<description>cache framework. high performance, multi level, easy to use.</description>
 	<url>https://github.com/icodegarden/wing</url>
     <licenses>
         <license>
