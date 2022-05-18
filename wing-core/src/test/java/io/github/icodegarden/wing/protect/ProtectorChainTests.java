@@ -1,22 +1,17 @@
 package io.github.icodegarden.wing.protect;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.spy;
 
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
+import io.github.icodegarden.commons.lang.limiter.CounterRateLimiter;
 import io.github.icodegarden.wing.Cacher;
 import io.github.icodegarden.wing.UserForTests;
 import io.github.icodegarden.wing.common.RejectedRequestException;
-import io.github.icodegarden.wing.limiter.DefaultRateLimiter;
-import io.github.icodegarden.wing.limiter.Dimension;
-import io.github.icodegarden.wing.protect.ProtectorChain;
-import io.github.icodegarden.wing.protect.RateLimitProtector;
-import io.github.icodegarden.wing.protect.SynchronizedDoubleCheckProtector;
 import io.github.icodegarden.wing.protect.ProtectorChain.Default;
-
-import static org.mockito.Mockito.*;
 
 /**
  * 
@@ -26,8 +21,7 @@ import static org.mockito.Mockito.*;
 //@RunWith(MockitoJUnitRunner.class)
 public class ProtectorChainTests {
 
-	RateLimitProtector rateLimitProtector = new RateLimitProtector(new DefaultRateLimiter(),
-			key -> new Dimension[] { new Dimension("test", 1, 200) });
+	RateLimitProtector rateLimitProtector = new RateLimitProtector(new CounterRateLimiter(1, 200));
 	SynchronizedDoubleCheckProtector synchronizedDoubleCheckProtector = new SynchronizedDoubleCheckProtector();
 
 	protected String key = "key";

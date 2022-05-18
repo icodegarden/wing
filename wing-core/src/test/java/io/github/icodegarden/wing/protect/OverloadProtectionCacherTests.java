@@ -5,18 +5,12 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
+import io.github.icodegarden.commons.lang.limiter.CounterRateLimiter;
 import io.github.icodegarden.commons.lang.tuple.Tuples;
 import io.github.icodegarden.wing.Cacher;
 import io.github.icodegarden.wing.CacherTests;
 import io.github.icodegarden.wing.common.RejectedRequestException;
 import io.github.icodegarden.wing.java.HeapMemoryCacher;
-import io.github.icodegarden.wing.limiter.DefaultRateLimiter;
-import io.github.icodegarden.wing.limiter.Dimension;
-import io.github.icodegarden.wing.protect.BlackListFilter;
-import io.github.icodegarden.wing.protect.OverloadProtectionCacher;
-import io.github.icodegarden.wing.protect.RateLimitProtector;
-import io.github.icodegarden.wing.protect.SynchronizedDoubleCheckProtector;
-import io.github.icodegarden.wing.protect.WhiteListFilter;
 
 /**
  * 
@@ -103,8 +97,7 @@ public class OverloadProtectionCacherTests extends CacherTests {
 
 	@Test
 	public void testProtectors() throws Exception {
-		Dimension[] ds = new Dimension[] {new Dimension("global", 1, 1000)};
-		RateLimitProtector p1 = new RateLimitProtector(new DefaultRateLimiter(), key->ds) ;
+		RateLimitProtector p1 = new RateLimitProtector(new CounterRateLimiter(1,1000)) ;
 		SynchronizedDoubleCheckProtector p2 = new SynchronizedDoubleCheckProtector();
 		OverloadProtectionCacher cacher = new OverloadProtectionCacher(new HeapMemoryCacher(), null,
 				Arrays.asList(p1, p2));

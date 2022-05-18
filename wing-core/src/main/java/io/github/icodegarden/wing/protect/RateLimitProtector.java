@@ -2,9 +2,8 @@ package io.github.icodegarden.wing.protect;
 
 import java.util.function.Function;
 
+import io.github.icodegarden.commons.lang.limiter.RateLimiter;
 import io.github.icodegarden.wing.common.RejectedRequestException;
-import io.github.icodegarden.wing.limiter.Dimension;
-import io.github.icodegarden.wing.limiter.RateLimiter;
 
 /**
  * <p>
@@ -15,26 +14,34 @@ import io.github.icodegarden.wing.limiter.RateLimiter;
  */
 public class RateLimitProtector implements Protector {
 
-	private final RateLimiter rateLimiter;
-	private final Function<String, Dimension[]> dimensionOffer;
+	private final Function<String, RateLimiter> rateLimiterOffer;
 
 	/**
 	 * 
 	 * @param rateLimiter
 	 * @param dimensionOffer <T,R> T=key
 	 */
-	public RateLimitProtector(RateLimiter rateLimiter, Function<String, Dimension[]> dimensionOffer) {
-		this.rateLimiter = rateLimiter;
-		this.dimensionOffer = dimensionOffer;
+	public RateLimitProtector(RateLimiter rateLimiter) {
+		this(new Function<String, RateLimiter>() {
+			@Override
+			public RateLimiter apply(String t) {
+				return rateLimiter;
+			}
+		});
+	}
+
+	public RateLimitProtector(Function<String, RateLimiter> rateLimiterOffer) {
+		this.rateLimiterOffer = rateLimiterOffer;
 	}
 
 	@Override
 	public <V> V doProtector(ProtectorChain<V> chain) throws RejectedRequestException {
 		String key = chain.key();
 
-		Dimension[] dimensions = dimensionOffer.apply(key);
-		if (dimensions != null) {
-			if (!rateLimiter.isAllowable(dimensions)) {
+		RateLimiter rateLimiter = rateLimiterOffer.apply(key);
+
+		if (rateLimiter != null) {
+			if (!rateLimiter.isAllowable()) {
 				throw new RejectedRequestException(this, "Rate Limited on load data when cache not found, key:" + key);
 			}
 		}
