@@ -1,5 +1,6 @@
 package io.github.icodegarden.wing.redis;
 
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,8 +32,14 @@ import redis.clients.jedis.JedisPool;
 @SuppressWarnings("rawtypes")
 public class RedisCacher implements DistributedCacher {
 
+	/**
+	 * lua的数组索引从1开始<br>
+	 * #KEYS是要操作的reids key的数量<br>
+	 * redis eval传参位子对应：keycount->#KEYS，params首先是对应数量的keys，后面再跟values<br>
+	 * 例如eval(SETBATCH_SCRIPT, 3, key1的byte[],key2的byte[],key3的byte[],expire1的byte[],expire2的byte[],expire3的byte[],v1的byte[],v2的byte[],v3的byte[]);
+	 */
 	private static final byte[] SETBATCH_SCRIPT = "for i=1,#KEYS do redis.call('setex',KEYS[i],ARGV[i],ARGV[#KEYS+i]) end;"
-			.getBytes();
+			.getBytes(Charset.forName("utf-8"));
 
 	private final RedisExecutor redisExecutor;
 	private final Serializer serializer;
@@ -105,6 +112,7 @@ public class RedisCacher implements DistributedCacher {
 		}
 		return ret;
 	}
+
 	/**
 	 * expireSeconds如果不大于0，则认为已过期，不需要缓存
 	 */
@@ -115,6 +123,7 @@ public class RedisCacher implements DistributedCacher {
 		}
 		return null;
 	}
+
 	/**
 	 * expireSeconds如果不大于0，则认为已过期，不需要缓存
 	 */
@@ -123,15 +132,15 @@ public class RedisCacher implements DistributedCacher {
 		List<Tuple3<String, V, Integer>> filtered = kvts.stream().filter(kvt -> kvt.getT3() > 0)
 				.collect(Collectors.toList());
 		if (!filtered.isEmpty()) {
-			byte[][] params = new byte[filtered.size() * 3][];
+			byte[][] params = new byte[filtered.size() * 3][];// 3倍的原因是每个都有key,v,expire
 			for (int i = 0; i < filtered.size(); i++) {
 				Tuple3<String, V, Integer> kvt = filtered.get(i);
 
-				params[i] = kvt.getT1().getBytes();
-				params[filtered.size() + i] = kvt.getT3().toString().getBytes();
-				params[filtered.size() * 2 + i] = serializer.serialize(kvt.getT2());
+				params[i] = kvt.getT1().getBytes();// key
+				params[filtered.size() + i] = kvt.getT3().toString().getBytes();// 隐性*1，expire
+				params[filtered.size() * 2 + i] = serializer.serialize(kvt.getT2());// *2 value
 			}
-
+			//eval(SETBATCH_SCRIPT, 3, key1的byte[],key2的byte[],key3的byte[],expire1的byte[],expire2的byte[],expire3的byte[],v1的byte[],v2的byte[],v3的byte[]);
 			redisExecutor.eval(SETBATCH_SCRIPT, filtered.size(), params);// 这种性能损失最少，避免了jedis SDK的内部再次封装
 		}
 		return null;
