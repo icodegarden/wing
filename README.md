@@ -28,8 +28,7 @@ wing是一个具有保护、同步等特性的多级缓存框架
 
 ![缓存同步策略](./imgs/缓存同步策略.png)
 
-# 快速开始
-下面展示如何快速开始使用
+# 如何使用
 
 ## Maven依赖
 ```xml
@@ -88,6 +87,6 @@ Cacher cacher = UsageBuilder.redisOfL3BasedOnHeapAndDirectBuilder().redisCacher(
 				.upgradeMinUsedTimes(5).build();
 ```
 
-## Cacher API
+# Cacher API
 
 ![API](./imgs/API.png)
