@@ -20,16 +20,20 @@ public class BloomFilter extends ShouldFilter {
 	private final BitSet bits;
 
 	private final Hasher[] hashers;
+
 	/**
 	 * 使用默认bitSize,使用java string的hash算法
+	 * 
 	 * @param countOfHasher
 	 * @param shouldFilter
 	 */
 	public BloomFilter(int countOfHasher, Predicate<String> shouldFilter) {
 		this(DEFAULT_SIZE, countOfHasher, shouldFilter);
 	}
+
 	/**
 	 * 使用java string的hash算法
+	 * 
 	 * @param bitSize
 	 * @param countOfHasher
 	 * @param shouldFilter
@@ -43,8 +47,10 @@ public class BloomFilter extends ShouldFilter {
 			seed = seed >> 1;
 		}
 	}
+
 	/**
 	 * 使用默认bitSize
+	 * 
 	 * @param hashers
 	 * @param shouldFilter
 	 */
@@ -64,16 +70,16 @@ public class BloomFilter extends ShouldFilter {
 			bits.set(f.hash(value) & (bitSize - 1));
 		}
 	}
-	
+
 	public void add(Collection<String> values) {
-		values.forEach(v->{
+		values.forEach(v -> {
 			add(v);
 		});
 	}
-	
+
 	@Override
 	protected void shouldDoFilter(String key) throws RejectedRequestException {
-		if(!contains(key)) {
+		if (!contains(key)) {
 			throw new RejectedRequestException(this, "request key:" + key + " reject by bloom filter");
 		}
 	}
@@ -89,32 +95,6 @@ public class BloomFilter extends ShouldFilter {
 			}
 		}
 		return ret;
-	}
-	/**
-	 * java 的string hash算法+seed
-	 * @author Fangfang.Xu
-	 *
-	 */
-	class JavaStringHasher implements Hasher {
-		private final int seed;
-
-		public JavaStringHasher(int seed) {
-			this.seed = seed;
-		}
-
-		@Override
-		public int hash(String value) {
-			int hash = 0;
-
-			int h = hash;
-			if (h == 0 && value.length() > 0) {
-				for (int i = 0; i < value.length(); i++) {
-					h = seed * h + value.charAt(i);
-				}
-				hash = h;
-			}
-			return h;
-		}
 	}
 
 }
