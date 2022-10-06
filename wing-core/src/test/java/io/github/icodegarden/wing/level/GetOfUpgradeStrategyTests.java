@@ -9,13 +9,12 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.github.icodegarden.commons.redis.PoolRedisExecutor;
+import io.github.icodegarden.commons.redis.RedisExecutor;
 import io.github.icodegarden.wing.Cacher;
 import io.github.icodegarden.wing.KeySizeLRUCacher;
 import io.github.icodegarden.wing.java.DefaultDirectMemoryCacher;
 import io.github.icodegarden.wing.java.HeapMemoryCacher;
-import io.github.icodegarden.wing.level.GetOfUpgradeStrategy;
-import io.github.icodegarden.wing.level.Level;
-import io.github.icodegarden.wing.level.OutOfLimitStrategy;
 import io.github.icodegarden.wing.level.GetOfUpgradeStrategy.UpgradeGtMinAvgDeleteInCurrent;
 import io.github.icodegarden.wing.level.GetOfUpgradeStrategy.UpgradeGtMinAvgNotDeleteInDistributed;
 import io.github.icodegarden.wing.metrics.KeySizeMetricsCacher;
@@ -34,7 +33,8 @@ public class GetOfUpgradeStrategyTests {
 	Cacher L2 = new KeySizeLRUCacher(new KeySizeMetricsCacher(new DefaultDirectMemoryCacher()),10);
 	
 	JedisPool jedisPool = new JedisPool(new GenericObjectPoolConfig(),"172.22.122.23",6399,2000,null);
-	Cacher L3 = new KeySizeLRUCacher(new KeySizeMetricsCacher(RedisCacher.jedisPool(jedisPool)),10);
+	RedisExecutor redisExecutor = new PoolRedisExecutor(jedisPool);
+	Cacher L3 = new KeySizeLRUCacher(new KeySizeMetricsCacher(new RedisCacher(redisExecutor)),10);
 	
 	Level level = Level.of(Arrays.asList(L1,L2,L3));
 	

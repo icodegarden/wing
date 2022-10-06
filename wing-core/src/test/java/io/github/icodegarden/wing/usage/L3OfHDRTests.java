@@ -7,9 +7,12 @@ import org.junit.jupiter.api.Test;
 
 import io.github.icodegarden.commons.lang.serialization.KryoDeserializer;
 import io.github.icodegarden.commons.lang.serialization.KryoSerializer;
+import io.github.icodegarden.commons.redis.PoolRedisExecutor;
+import io.github.icodegarden.commons.redis.RedisExecutor;
 import io.github.icodegarden.wing.Cacher;
 import io.github.icodegarden.wing.PerformanceTests;
 import io.github.icodegarden.wing.level.LevelableCacher;
+import io.github.icodegarden.wing.redis.JedisPoolCacherTests;
 import io.github.icodegarden.wing.redis.RedisCacher;
 import io.github.icodegarden.wing.usage.UsageBuilder;
 import redis.clients.jedis.JedisPool;
@@ -26,7 +29,8 @@ public class L3OfHDRTests extends PerformanceTests {
 	KryoDeserializer deserializer = new KryoDeserializer();
 	
 	JedisPool jedisPool = new JedisPool(new GenericObjectPoolConfig(),"172.22.122.23",6399,2000,null);
-	RedisCacher redisCacher = RedisCacher.jedisPool(jedisPool, serializer,deserializer );
+	RedisExecutor redisExecutor = new PoolRedisExecutor(jedisPool);
+	RedisCacher redisCacher = new RedisCacher(redisExecutor, serializer,deserializer );
 	
 	String key = "key";
 	String v = "v";

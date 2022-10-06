@@ -8,21 +8,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.data.redis.core.RedisTemplate;
-
 import io.github.icodegarden.commons.lang.serialization.Deserializer;
 import io.github.icodegarden.commons.lang.serialization.JavaDeserializer;
 import io.github.icodegarden.commons.lang.serialization.JavaSerializer;
 import io.github.icodegarden.commons.lang.serialization.Serializer;
 import io.github.icodegarden.commons.lang.tuple.Tuple3;
 import io.github.icodegarden.commons.lang.util.CollectionUtils;
-import io.github.icodegarden.commons.redis.ClusterRedisExecutor;
-import io.github.icodegarden.commons.redis.PoolRedisExecutor;
 import io.github.icodegarden.commons.redis.RedisExecutor;
-import io.github.icodegarden.commons.redis.TemplateRedisExecutor;
 import io.github.icodegarden.wing.distribution.DistributedCacher;
-import redis.clients.jedis.JedisCluster;
-import redis.clients.jedis.JedisPool;
 
 /**
  * 
@@ -45,47 +38,17 @@ public class RedisCacher implements DistributedCacher {
 	private final Serializer serializer;
 	private final Deserializer deserializer;
 
-	private RedisCacher(RedisExecutor redisExecutor, Serializer<?> serializer, Deserializer<?> deserializer) {
+	/**
+	 * use java Serializer,Deserializer
+	 */
+	public RedisCacher(RedisExecutor redisExecutor) {
+		this(redisExecutor, new JavaSerializer(), new JavaDeserializer());
+	}
+	
+	public RedisCacher(RedisExecutor redisExecutor, Serializer<?> serializer, Deserializer<?> deserializer) {
 		this.redisExecutor = redisExecutor;
 		this.serializer = serializer;
 		this.deserializer = deserializer;
-	}
-
-	/**
-	 * use java Serializer,Deserializer
-	 * 
-	 * @param jc
-	 * @return
-	 */
-	public static RedisCacher jedisCluster(JedisCluster jc) {
-		return jedisCluster(jc, new JavaSerializer(), new JavaDeserializer());
-	}
-
-	public static RedisCacher jedisCluster(JedisCluster jc, Serializer<?> serializer, Deserializer<?> deserializer) {
-		return new RedisCacher(new ClusterRedisExecutor(jc), serializer, deserializer);
-	}
-
-	/**
-	 * use java Serializer,Deserializer
-	 * 
-	 * @param jedisPool
-	 * @return
-	 */
-	public static RedisCacher jedisPool(JedisPool jedisPool) {
-		return jedisPool(jedisPool, new JavaSerializer(), new JavaDeserializer());
-	}
-
-	public static RedisCacher jedisPool(JedisPool jedisPool, Serializer<?> serializer, Deserializer<?> deserializer) {
-		return new RedisCacher(new PoolRedisExecutor(jedisPool), serializer, deserializer);
-	}
-
-	public static RedisCacher redisTemplate(RedisTemplate redisTemplate) {
-		return redisTemplate(redisTemplate, new JavaSerializer(), new JavaDeserializer());
-	}
-
-	public static RedisCacher redisTemplate(RedisTemplate redisTemplate, Serializer<?> serializer,
-			Deserializer<?> deserializer) {
-		return new RedisCacher(new TemplateRedisExecutor(redisTemplate), serializer, deserializer);
 	}
 
 	@Override

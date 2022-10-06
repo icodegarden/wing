@@ -4,6 +4,8 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.function.Predicate;
 
+import io.github.icodegarden.commons.lang.algorithm.HashFunction;
+import io.github.icodegarden.commons.lang.algorithm.JavaStringFunction;
 import io.github.icodegarden.wing.common.RejectedRequestException;
 
 /**
@@ -19,7 +21,7 @@ public class BloomFilter extends ShouldFilter {
 
 	private final BitSet bits;
 
-	private final Hasher[] hashers;
+	private final HashFunction[] hashers;
 
 	/**
 	 * 使用默认bitSize,使用java string的hash算法
@@ -39,11 +41,11 @@ public class BloomFilter extends ShouldFilter {
 	 * @param shouldFilter
 	 */
 	public BloomFilter(int bitSize, int countOfHasher, Predicate<String> shouldFilter) {
-		this(bitSize, new JavaStringHasher[countOfHasher], shouldFilter);
+		this(bitSize, new JavaStringFunction[countOfHasher], shouldFilter);
 
 		int seed = 31 << (countOfHasher / 2);
 		for (int i = 0; i < countOfHasher; i++) {
-			hashers[i] = new JavaStringHasher(seed);
+			hashers[i] = new JavaStringFunction(seed);
 			seed = seed >> 1;
 		}
 	}
@@ -54,11 +56,11 @@ public class BloomFilter extends ShouldFilter {
 	 * @param hashers
 	 * @param shouldFilter
 	 */
-	public BloomFilter(Hasher[] hashers, Predicate<String> shouldFilter) {
+	public BloomFilter(HashFunction[] hashers, Predicate<String> shouldFilter) {
 		this(DEFAULT_SIZE, hashers, shouldFilter);
 	}
 
-	public BloomFilter(int bitSize, Hasher[] hashers, Predicate<String> shouldFilter) {
+	public BloomFilter(int bitSize, HashFunction[] hashers, Predicate<String> shouldFilter) {
 		super(shouldFilter);
 		this.bitSize = bitSize;
 		bits = new BitSet(bitSize);
@@ -66,7 +68,7 @@ public class BloomFilter extends ShouldFilter {
 	}
 
 	public void add(String value) {
-		for (Hasher f : hashers) {
+		for (HashFunction f : hashers) {
 			bits.set(f.hash(value) & (bitSize - 1));
 		}
 	}
@@ -89,7 +91,7 @@ public class BloomFilter extends ShouldFilter {
 			return false;
 		}
 		boolean ret = true;
-		for (Hasher f : hashers) {
+		for (HashFunction f : hashers) {
 			if (ret) {
 				ret = ret & bits.get(f.hash(value) & (bitSize - 1));
 			}

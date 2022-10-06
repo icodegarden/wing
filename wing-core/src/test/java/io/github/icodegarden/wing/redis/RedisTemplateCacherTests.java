@@ -10,6 +10,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import io.github.icodegarden.commons.lang.serialization.KryoDeserializer;
 import io.github.icodegarden.commons.lang.serialization.KryoSerializer;
+import io.github.icodegarden.commons.redis.RedisExecutor;
+import io.github.icodegarden.commons.redis.TemplateRedisExecutor;
 import io.github.icodegarden.wing.Cacher;
 import io.github.icodegarden.wing.redis.RedisCacher;
 import redis.clients.jedis.JedisPoolConfig;
@@ -41,7 +43,8 @@ public class RedisTemplateCacherTests extends RedisCacherTests {
 	
 	@Override
 	protected Cacher getCacher() {
-		cacher = RedisCacher.redisTemplate(newRedisTemplate(), new KryoSerializer(), new KryoDeserializer());
+		RedisExecutor redisExecutor = new TemplateRedisExecutor(newRedisTemplate());
+		cacher = new RedisCacher(redisExecutor, new KryoSerializer(), new KryoDeserializer());
 		return cacher;
 	}
 	

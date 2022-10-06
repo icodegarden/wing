@@ -7,6 +7,9 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 import io.github.icodegarden.commons.lang.serialization.KryoDeserializer;
 import io.github.icodegarden.commons.lang.serialization.KryoSerializer;
+import io.github.icodegarden.commons.redis.ClusterRedisExecutor;
+import io.github.icodegarden.commons.redis.PoolRedisExecutor;
+import io.github.icodegarden.commons.redis.RedisExecutor;
 import io.github.icodegarden.wing.Cacher;
 import io.github.icodegarden.wing.redis.RedisCacher;
 import redis.clients.jedis.HostAndPort;
@@ -25,7 +28,8 @@ public class JedisClusterCacherTests extends RedisCacherTests {
 	
 	@Override
 	protected Cacher getCacher() {
-		cacher = RedisCacher.jedisCluster(newJedisCluster(), new KryoSerializer(), new KryoDeserializer());
+		RedisExecutor redisExecutor = new ClusterRedisExecutor(newJedisCluster());
+		cacher = new RedisCacher(redisExecutor, new KryoSerializer(), new KryoDeserializer());
 		
 		return cacher;
 	}
