@@ -129,7 +129,7 @@ public class NioBroadcast extends AbstractDistributionSyncStrategy {
 						}
 					}
 					try {
-						//TODO 可以考虑加入失败重试机制，使用request，响应boolean
+						//FIXME 可以考虑加入失败重试机制，使用request，响应boolean
 						nioClient.send(message);
 					} catch (Exception e) {
 						log.error("ex on notice message to Nio Client:{}", nioClient, e);

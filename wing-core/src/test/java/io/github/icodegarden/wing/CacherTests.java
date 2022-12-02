@@ -254,7 +254,6 @@ public abstract class CacherTests extends PerformanceTests {
 //				assertNull(cacher.get(j+""));
 //			}
 //		} catch (Throwable e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //			throw e;
 //		}
