@@ -21,12 +21,12 @@
 		<dependency>
 			<groupId>io.github.icodegarden</groupId>
 			<artifactId>commons-nio-java</artifactId>
-			<version>${commons-version}</version>
+			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.icodegarden</groupId>
 			<artifactId>commons-redis</artifactId>
-			<version>${commons-version}</version>
+			<version>${commons.version}</version>
 		</dependency>
 		
 		<dependency>
