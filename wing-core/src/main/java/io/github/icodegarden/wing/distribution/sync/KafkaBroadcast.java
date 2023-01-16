@@ -14,8 +14,10 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.github.icodegarden.commons.lang.serialization.KryoDeserializer;
-import io.github.icodegarden.commons.lang.serialization.KryoSerializer;
+import io.github.icodegarden.commons.lang.serialization.Deserializer;
+import io.github.icodegarden.commons.lang.serialization.Hessian2Deserializer;
+import io.github.icodegarden.commons.lang.serialization.Hessian2Serializer;
+import io.github.icodegarden.commons.lang.serialization.Serializer;
 import io.github.icodegarden.wing.common.EnvException;
 import io.github.icodegarden.wing.common.SyncFailedException;
 
@@ -24,15 +26,14 @@ import io.github.icodegarden.wing.common.SyncFailedException;
  * @author Fangfang.Xu
  *
  */
-@SuppressWarnings("rawtypes")
 public class KafkaBroadcast extends AbstractDistributionSyncStrategy {
 
 	private static final Logger log = LoggerFactory.getLogger(KafkaBroadcast.class);
 
 	private static final String TOPIC = "io.cahce.sync";
 
-	private static final KryoSerializer KRYO_SERIALIZER = new KryoSerializer();
-	private static final KryoDeserializer KRYO_DESERIALIZER = new KryoDeserializer();
+	private static final Serializer<Object> SERIALIZER = new Hessian2Serializer();
+	private static final Deserializer<Object> DESERIALIZER = new Hessian2Deserializer();
 
 	private KafkaProducer<String, byte[]> producer;
 	private KafkaConsumer<String, byte[]> consumer;
@@ -70,7 +71,7 @@ public class KafkaBroadcast extends AbstractDistributionSyncStrategy {
 						for (ConsumerRecord<String, byte[]> record : records) {
 							try {
 								byte[] message = record.value();
-								DistributionSyncDTO distributionSyncDTO = (DistributionSyncDTO) KRYO_DESERIALIZER
+								DistributionSyncDTO distributionSyncDTO = (DistributionSyncDTO) DESERIALIZER
 										.deserialize(message);
 								receiveSync(distributionSyncDTO);
 							} catch (Exception e) {
@@ -87,7 +88,7 @@ public class KafkaBroadcast extends AbstractDistributionSyncStrategy {
 
 	@Override
 	protected void broadcast(DistributionSyncDTO message) throws SyncFailedException {
-		byte[] bytes = KRYO_SERIALIZER.serialize(message);
+		byte[] bytes = SERIALIZER.serialize(message);
 
 		ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>(TOPIC, bytes);
 		producer.send(record);

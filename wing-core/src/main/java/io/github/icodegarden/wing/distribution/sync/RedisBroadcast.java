@@ -8,8 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import io.github.icodegarden.commons.lang.serialization.KryoDeserializer;
-import io.github.icodegarden.commons.lang.serialization.KryoSerializer;
+import io.github.icodegarden.commons.lang.serialization.Deserializer;
+import io.github.icodegarden.commons.lang.serialization.Hessian2Deserializer;
+import io.github.icodegarden.commons.lang.serialization.Hessian2Serializer;
+import io.github.icodegarden.commons.lang.serialization.Serializer;
 import io.github.icodegarden.commons.lang.util.ThreadPoolUtils;
 import io.github.icodegarden.commons.redis.ClusterRedisExecutor;
 import io.github.icodegarden.commons.redis.PoolRedisExecutor;
@@ -38,8 +40,8 @@ public class RedisBroadcast extends AbstractDistributionSyncStrategy {
 
 //	private static final byte[] SUB_CHANNEL = "io.cahce.sync".getBytes(Charsets.UTF8);
 
-	private static final KryoSerializer KRYO_SERIALIZER = new KryoSerializer();
-	private static final KryoDeserializer KRYO_DESERIALIZER = new KryoDeserializer();
+	private static final Serializer<Object> SERIALIZER = new Hessian2Serializer();
+	private static final Deserializer<Object> DESERIALIZER = new Hessian2Deserializer();
 
 	public static RedisBroadcast jedisCluster(JedisCluster jc) {
 		return new RedisBroadcast(new ClusterRedisExecutor(jc));
@@ -120,7 +122,7 @@ public class RedisBroadcast extends AbstractDistributionSyncStrategy {
 			@Override
 			public void onMessage(byte[] channel, byte[] message) {
 				lastMessageMillis = System.currentTimeMillis();
-				DistributionSyncDTO distributionSyncDTO = (DistributionSyncDTO) KRYO_DESERIALIZER.deserialize(message);
+				DistributionSyncDTO distributionSyncDTO = (DistributionSyncDTO) DESERIALIZER.deserialize(message);
 				receiveSync(distributionSyncDTO);
 			}
 		};
@@ -151,7 +153,7 @@ public class RedisBroadcast extends AbstractDistributionSyncStrategy {
 
 	@Override
 	protected void broadcast(DistributionSyncDTO message) throws SyncFailedException {
-		byte[] bytes = KRYO_SERIALIZER.serialize(message);
+		byte[] bytes = SERIALIZER.serialize(message);
 		try {
 			redisExecutor.publish(SUB_CHANNEL, bytes);
 		} catch (Exception e) {
