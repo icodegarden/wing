@@ -1,6 +1,6 @@
 package io.github.icodegarden.wing.protect;
 
-import io.github.icodegarden.wing.common.RejectedRequestException;
+import io.github.icodegarden.wing.common.RejectedCacheException;
 
 /**
  * <p>
@@ -20,7 +20,7 @@ public interface Protector {
 	 * @param <V>
 	 * @param chain
 	 * @return
-	 * @throws RejectedRequestException 拒绝方式的保护
+	 * @throws RejectedCacheException 拒绝方式的保护
 	 */
-	<V> V doProtector(ProtectorChain<V> chain) throws RejectedRequestException;
+	<V> V doProtector(ProtectorChain<V> chain) throws RejectedCacheException;
 }

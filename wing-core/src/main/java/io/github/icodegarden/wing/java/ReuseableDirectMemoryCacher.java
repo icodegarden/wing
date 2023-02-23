@@ -23,7 +23,7 @@ import io.github.icodegarden.commons.lang.serialization.JavaDeserializer;
 import io.github.icodegarden.commons.lang.serialization.JavaSerializer;
 import io.github.icodegarden.commons.lang.serialization.Serializer;
 import io.github.icodegarden.commons.lang.util.ThreadPoolUtils;
-import io.github.icodegarden.wing.common.ArgumentException;
+import io.github.icodegarden.wing.common.ArgumentCacheException;
 
 /**
  * 空间可复用，自动清理
@@ -185,7 +185,7 @@ public class ReuseableDirectMemoryCacher extends DirectMemoryCacher {
 	 */
 	public void setSizeFactor(float sizeFactor) {
 		if (sizeFactor < 1) {
-			throw new ArgumentException("sizeFactor must gte 1.0");
+			throw new ArgumentCacheException("sizeFactor must gte 1.0");
 		}
 		this.sizeFactor = sizeFactor;
 	}

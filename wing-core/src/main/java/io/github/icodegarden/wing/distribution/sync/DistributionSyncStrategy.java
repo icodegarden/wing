@@ -2,7 +2,7 @@ package io.github.icodegarden.wing.distribution.sync;
 
 import java.io.Closeable;
 
-import io.github.icodegarden.wing.common.SyncFailedException;
+import io.github.icodegarden.wing.common.SyncFailedCacheException;
 
 /**
  * <p>
@@ -27,13 +27,13 @@ public interface DistributionSyncStrategy extends Closeable {
 	 * @param key
 	 * @param v
 	 * @param expireSeconds
-	 * @throws SyncFailedException
+	 * @throws SyncFailedCacheException
 	 */
-	<V> void onSet(String key, V v, int expireSeconds) throws SyncFailedException;
+	<V> void onSet(String key, V v, int expireSeconds) throws SyncFailedCacheException;
 	/**
 	 * 同步发起者要做的事情
 	 * @param key
-	 * @throws SyncFailedException
+	 * @throws SyncFailedCacheException
 	 */
-	void onRemove(String key) throws SyncFailedException;
+	void onRemove(String key) throws SyncFailedCacheException;
 }

@@ -3,7 +3,7 @@ package io.github.icodegarden.wing.protect;
 import java.util.function.Function;
 
 import io.github.icodegarden.commons.lang.limiter.RateLimiter;
-import io.github.icodegarden.wing.common.RejectedRequestException;
+import io.github.icodegarden.wing.common.RejectedCacheException;
 
 /**
  * <p>
@@ -30,19 +30,19 @@ public class RateLimitProtector implements Protector {
 		});
 	}
 
-	public RateLimitProtector(Function<String, RateLimiter> rateLimiterOffer) {
+	public RateLimitProtector(Function<String/*cache key*/, RateLimiter> rateLimiterOffer) {
 		this.rateLimiterOffer = rateLimiterOffer;
 	}
 
 	@Override
-	public <V> V doProtector(ProtectorChain<V> chain) throws RejectedRequestException {
+	public <V> V doProtector(ProtectorChain<V> chain) throws RejectedCacheException {
 		String key = chain.key();
 
 		RateLimiter rateLimiter = rateLimiterOffer.apply(key);
 
 		if (rateLimiter != null) {
 			if (!rateLimiter.isAllowable()) {
-				throw new RejectedRequestException(this, "Rate Limited on load data when cache not found, key:" + key);
+				throw new RejectedCacheException(this, "RateLimited on load data when cache not found, key:" + key);
 			}
 		}
 		return chain.doProtector();

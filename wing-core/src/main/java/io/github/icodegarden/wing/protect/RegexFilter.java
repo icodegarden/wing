@@ -4,7 +4,7 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import io.github.icodegarden.wing.common.RejectedRequestException;
+import io.github.icodegarden.wing.common.RejectedCacheException;
 
 /**
  * @author Fangfang.Xu
@@ -22,10 +22,10 @@ public class RegexFilter extends ShouldFilter {
 	}
 
 	@Override
-	protected void shouldDoFilter(String key) throws RejectedRequestException {
+	protected void shouldDoFilter(String key) throws RejectedCacheException {
 		Matcher m = p.matcher(key);
 		if (!m.matches()) {
-			throw new RejectedRequestException(this, "request key:" + key + " reject by regex:" + regex);
+			throw new RejectedCacheException(this, "Regex Not Allowed cache key:" + key);
 		}
 	}
 }

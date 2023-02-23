@@ -18,8 +18,8 @@ import io.github.icodegarden.commons.lang.serialization.Deserializer;
 import io.github.icodegarden.commons.lang.serialization.Hessian2Deserializer;
 import io.github.icodegarden.commons.lang.serialization.Hessian2Serializer;
 import io.github.icodegarden.commons.lang.serialization.Serializer;
-import io.github.icodegarden.wing.common.EnvException;
-import io.github.icodegarden.wing.common.SyncFailedException;
+import io.github.icodegarden.wing.common.EnvCacheException;
+import io.github.icodegarden.wing.common.SyncFailedCacheException;
 
 /**
  * 
@@ -60,7 +60,7 @@ public class KafkaBroadcast extends AbstractDistributionSyncStrategy {
 		return inject;
 	}
 
-	private void subBroadcast() throws EnvException {
+	private void subBroadcast() throws EnvCacheException {
 		consumer.subscribe(Arrays.asList(TOPIC));
 
 		new Thread(this.getClass().getSimpleName() + "-subscribe") {
@@ -87,7 +87,7 @@ public class KafkaBroadcast extends AbstractDistributionSyncStrategy {
 	}
 
 	@Override
-	protected void broadcast(DistributionSyncDTO message) throws SyncFailedException {
+	protected void broadcast(DistributionSyncDTO message) throws SyncFailedCacheException {
 		byte[] bytes = SERIALIZER.serialize(message);
 
 		ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>(TOPIC, bytes);

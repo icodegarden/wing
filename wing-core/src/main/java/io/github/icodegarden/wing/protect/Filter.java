@@ -1,6 +1,6 @@
 package io.github.icodegarden.wing.protect;
 
-import io.github.icodegarden.wing.common.RejectedRequestException;
+import io.github.icodegarden.wing.common.RejectedCacheException;
 
 /**
  * <p>
@@ -10,5 +10,5 @@ import io.github.icodegarden.wing.common.RejectedRequestException;
  */
 public interface Filter {
 
-	void doFilter(String key) throws RejectedRequestException;
+	void doFilter(String key) throws RejectedCacheException;
 }

@@ -22,8 +22,8 @@ import io.github.icodegarden.commons.nio.NioClient;
 import io.github.icodegarden.commons.nio.java.ClientNioSelector;
 import io.github.icodegarden.commons.nio.java.JavaNioClient;
 import io.github.icodegarden.commons.nio.java.JavaNioServer;
-import io.github.icodegarden.wing.common.EnvException;
-import io.github.icodegarden.wing.common.SyncFailedException;
+import io.github.icodegarden.wing.common.EnvCacheException;
+import io.github.icodegarden.wing.common.SyncFailedCacheException;
 
 /**
  * 
@@ -70,7 +70,7 @@ public class NioBroadcast extends AbstractDistributionSyncStrategy {
 		try {
 			javaNioServer.start();
 		} catch (IOException e) {
-			throw new EnvException("ex on start Nio Server", e);
+			throw new EnvCacheException("ex on start Nio Server", e);
 		}
 
 		/**
@@ -104,7 +104,7 @@ public class NioBroadcast extends AbstractDistributionSyncStrategy {
 	}
 
 	@Override
-	protected void broadcast(DistributionSyncDTO message) throws SyncFailedException {
+	protected void broadcast(DistributionSyncDTO message) throws SyncFailedCacheException {
 		/**
 		 * 只发送给相同服务名的，并且不包含本实例
 		 */

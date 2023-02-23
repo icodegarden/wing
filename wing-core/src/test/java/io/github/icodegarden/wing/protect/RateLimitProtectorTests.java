@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import io.github.icodegarden.commons.lang.limiter.CounterRateLimiter;
 import io.github.icodegarden.wing.Cacher;
 import io.github.icodegarden.wing.UserForTests;
-import io.github.icodegarden.wing.common.RejectedRequestException;
+import io.github.icodegarden.wing.common.RejectedCacheException;
 import io.github.icodegarden.wing.protect.ProtectorChain.Default;
 
 /**
@@ -42,7 +42,7 @@ public class RateLimitProtectorTests {
 			
 			chain.doProtector();
 			throw new RuntimeException("到这里失败");
-		} catch (RejectedRequestException e) {
+		} catch (RejectedCacheException e) {
 			assertEquals(protector, e.getRejector());
 			assertEquals("Rate Limited on load data when cache not found, key:" + key, e.getReason());
 		}

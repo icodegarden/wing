@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 
 import io.github.icodegarden.commons.lang.tuple.Tuple3;
 import io.github.icodegarden.wing.Cacher;
-import io.github.icodegarden.wing.common.RejectedRequestException;
+import io.github.icodegarden.wing.common.RejectedCacheException;
 
 /**
  * <p>
@@ -45,7 +45,7 @@ public class OverloadProtectionCacher implements Cacher {
 		return doProtectors(key, supplier, expireSeconds);
 	}
 
-	private void doFilters(String key) throws RejectedRequestException {
+	private void doFilters(String key) throws RejectedCacheException {
 		if (filters != null && !filters.isEmpty()) {
 			for (Filter filter : filters) {
 				filter.doFilter(key);

@@ -9,7 +9,7 @@ import io.github.icodegarden.commons.lang.serialization.Serializer;
 import io.github.icodegarden.wing.Cacher;
 import io.github.icodegarden.wing.KeySizeLRUCacher;
 import io.github.icodegarden.wing.SpaceSizeLRUCacher;
-import io.github.icodegarden.wing.common.ArgumentException;
+import io.github.icodegarden.wing.common.ArgumentCacheException;
 import io.github.icodegarden.wing.expire.AutoExpireCacher;
 import io.github.icodegarden.wing.java.HeapMemoryCacher;
 import io.github.icodegarden.wing.java.ReuseableDirectMemoryCacher;
@@ -65,7 +65,7 @@ public abstract class UsageBuilder {
 
 		public LevelableCacher build() {
 			if (redisCacher == null) {
-				throw new ArgumentException("redisCacher must not null");
+				throw new ArgumentCacheException("redisCacher must not null");
 			}
 			Cacher L1 = new KeySizeLRUCacher(new KeySizeMetricsCacher(new AutoExpireCacher(new HeapMemoryCacher())),
 					maxKeySizeOfHeap);

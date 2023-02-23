@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import io.github.icodegarden.commons.lang.tuple.Tuple3;
 import io.github.icodegarden.commons.lang.tuple.Tuples;
 import io.github.icodegarden.wing.SpaceSizeLRUCacher;
-import io.github.icodegarden.wing.common.ArgumentException;
+import io.github.icodegarden.wing.common.ArgumentCacheException;
 import io.github.icodegarden.wing.java.DefaultDirectMemoryCacher;
 import io.github.icodegarden.wing.java.DirectMemoryCacher;
 import io.github.icodegarden.wing.metrics.SpaceMetricsCacher;
@@ -42,7 +42,7 @@ public class SpaceSizeLRUCacherTests {
 		try{
 			cacher.set(Arrays.asList(Tuples.of(key, v, expireSeconds),Tuples.of(key2, v2, expireSeconds)));
 			throw new RuntimeException("expect IllegalArgumentException");
-		}catch (ArgumentException e) {
+		}catch (ArgumentCacheException e) {
 			assertEquals("maxBytes:87 <(lt) request key needSpace:174", e.getMessage());
 		}
 	}

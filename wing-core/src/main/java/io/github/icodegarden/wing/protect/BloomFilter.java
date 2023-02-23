@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 
 import io.github.icodegarden.commons.lang.algorithm.HashFunction;
 import io.github.icodegarden.commons.lang.algorithm.JavaStringFunction;
-import io.github.icodegarden.wing.common.RejectedRequestException;
+import io.github.icodegarden.wing.common.RejectedCacheException;
 
 /**
  * 
@@ -15,6 +15,9 @@ import io.github.icodegarden.wing.common.RejectedRequestException;
  */
 public class BloomFilter extends ShouldFilter {
 
+	/**
+	 * 2的24次=16777216，16777216/8bit=2097152byte=2m
+	 */
 	private static final int DEFAULT_SIZE = 1 << 24;
 
 	private final int bitSize;
@@ -22,6 +25,13 @@ public class BloomFilter extends ShouldFilter {
 	private final BitSet bits;
 
 	private final HashFunction[] hashers;
+
+	/**
+	 * 使用默认bitSize,默认countOfHasher=3
+	 */
+	public BloomFilter() {
+		this(DEFAULT_SIZE, 3, key -> true);
+	}
 
 	/**
 	 * 使用默认bitSize,使用java string的hash算法
@@ -80,9 +90,9 @@ public class BloomFilter extends ShouldFilter {
 	}
 
 	@Override
-	protected void shouldDoFilter(String key) throws RejectedRequestException {
+	protected void shouldDoFilter(String key) throws RejectedCacheException {
 		if (!contains(key)) {
-			throw new RejectedRequestException(this, "request key:" + key + " reject by bloom filter");
+			throw new RejectedCacheException(this, "Bloom Not Allowed cache key:" + key);
 		}
 	}
 

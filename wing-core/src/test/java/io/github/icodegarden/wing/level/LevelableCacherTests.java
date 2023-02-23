@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 import io.github.icodegarden.commons.lang.tuple.Tuples;
 import io.github.icodegarden.wing.Cacher;
 import io.github.icodegarden.wing.KeySizeLRUCacher;
-import io.github.icodegarden.wing.common.ArgumentException;
+import io.github.icodegarden.wing.common.ArgumentCacheException;
 import io.github.icodegarden.wing.java.DefaultDirectMemoryCacher;
 import io.github.icodegarden.wing.java.DirectMemoryCacher;
 import io.github.icodegarden.wing.java.HeapMemoryCacher;
@@ -136,7 +136,7 @@ public class LevelableCacherTests {
 		try{
 			levelableCacher.set(Arrays.asList(Tuples.of(key, v, seconds),Tuples.of(key2, v2, seconds)));
 			throw new RuntimeException();//跑到这里是失败
-		}catch (ArgumentException e) {
+		}catch (ArgumentCacheException e) {
 			assertEquals("maxKeySize:1 <(lt) request key size:2", e.getMessage());
 		}
 		

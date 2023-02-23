@@ -9,7 +9,7 @@ import io.github.icodegarden.commons.lang.limiter.CounterRateLimiter;
 import io.github.icodegarden.commons.lang.tuple.Tuples;
 import io.github.icodegarden.wing.Cacher;
 import io.github.icodegarden.wing.CacherTests;
-import io.github.icodegarden.wing.common.RejectedRequestException;
+import io.github.icodegarden.wing.common.RejectedCacheException;
 import io.github.icodegarden.wing.java.HeapMemoryCacher;
 
 /**
@@ -40,12 +40,12 @@ public class OverloadProtectionCacherTests extends CacherTests {
 		try {
 			cacher.getElseSupplier(key2, () -> v, expireSeconds);
 			throw new AssertionError("期望异常");
-		} catch (RejectedRequestException e) {
+		} catch (RejectedCacheException e) {
 		}
 		try {
 			cacher.getElseSupplier(key3, () -> v, expireSeconds);
 			throw new AssertionError("期望异常");
-		} catch (RejectedRequestException e) {
+		} catch (RejectedCacheException e) {
 		}
 
 		cacher.remove(Arrays.asList(key,key2,key3));
@@ -57,12 +57,12 @@ public class OverloadProtectionCacherTests extends CacherTests {
 		try {
 			cacher.getThenPredicateElseSupplier(key2, v -> false, () -> v, expireSeconds);
 			throw new AssertionError("期望异常");
-		} catch (RejectedRequestException e) {
+		} catch (RejectedCacheException e) {
 		}
 		try {
 			cacher.getThenPredicateElseSupplier(key3, v -> false, () -> v, expireSeconds);
 			throw new AssertionError("期望异常");
-		} catch (RejectedRequestException e) {
+		} catch (RejectedCacheException e) {
 		}
 
 		cacher.remove(Arrays.asList(key,key2,key3));
@@ -76,7 +76,7 @@ public class OverloadProtectionCacherTests extends CacherTests {
 			cacher.getElseSupplier(Arrays.asList(Tuples.of(key, () -> v, expireSeconds),
 					Tuples.of(key2, () -> v2, expireSeconds), Tuples.of(key3, () -> v3, expireSeconds)));
 			throw new AssertionError("期望异常");
-		} catch (RejectedRequestException e) {
+		} catch (RejectedCacheException e) {
 		}
 
 		cacher.remove(Arrays.asList(key,key2,key3));
@@ -91,7 +91,7 @@ public class OverloadProtectionCacherTests extends CacherTests {
 					Tuples.of(key2, v -> false, () -> v2, expireSeconds),
 					Tuples.of(key3, v -> false, () -> v3, expireSeconds)));
 			throw new AssertionError("期望异常");
-		} catch (RejectedRequestException e) {
+		} catch (RejectedCacheException e) {
 		}
 	}
 
@@ -109,7 +109,7 @@ public class OverloadProtectionCacherTests extends CacherTests {
 		try {
 			cacher.getElseSupplier(key2, () -> v, expireSeconds);
 			throw new AssertionError("期望异常");
-		} catch (RejectedRequestException e) {
+		} catch (RejectedCacheException e) {
 		}
 
 		Thread.sleep(1100);
@@ -123,7 +123,7 @@ public class OverloadProtectionCacherTests extends CacherTests {
 		try {
 			cacher.getThenPredicateElseSupplier(key2, v -> false, () -> v, expireSeconds);
 			throw new AssertionError("期望异常");
-		} catch (RejectedRequestException e) {
+		} catch (RejectedCacheException e) {
 		}
 
 		Thread.sleep(1100);
@@ -138,7 +138,7 @@ public class OverloadProtectionCacherTests extends CacherTests {
 			cacher.getElseSupplier(Arrays.asList(Tuples.of(key, () -> v, expireSeconds),
 					Tuples.of(key2, () -> v2, expireSeconds), Tuples.of(key3, () -> v3, expireSeconds)));
 			throw new AssertionError("期望异常");
-		} catch (RejectedRequestException e) {
+		} catch (RejectedCacheException e) {
 		}
 
 		Thread.sleep(1100);
@@ -154,7 +154,7 @@ public class OverloadProtectionCacherTests extends CacherTests {
 					Tuples.of(key2, v -> false, () -> v2, expireSeconds),
 					Tuples.of(key3, v -> false, () -> v3, expireSeconds)));
 			throw new AssertionError("期望异常");
-		} catch (RejectedRequestException e) {
+		} catch (RejectedCacheException e) {
 		}
 	}
 }

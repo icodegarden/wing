@@ -19,8 +19,8 @@ import io.github.icodegarden.commons.redis.RedisExecutor;
 import io.github.icodegarden.commons.redis.RedisExecutor.Unsubscribe;
 import io.github.icodegarden.commons.redis.TemplateRedisExecutor;
 import io.github.icodegarden.wing.common.Charsets;
-import io.github.icodegarden.wing.common.EnvException;
-import io.github.icodegarden.wing.common.SyncFailedException;
+import io.github.icodegarden.wing.common.EnvCacheException;
+import io.github.icodegarden.wing.common.SyncFailedCacheException;
 import redis.clients.jedis.BinaryJedisPubSub;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPool;
@@ -99,7 +99,7 @@ public class RedisBroadcast extends AbstractDistributionSyncStrategy {
 		return inject;
 	}
 
-	private void subBroadcast() throws EnvException {
+	private void subBroadcast() throws EnvCacheException {
 		BinaryJedisPubSub jedisPubSub = new BinaryJedisPubSub() {
 			@Override
 			public void onSubscribe(byte[] channel, int subscribedChannels) {
@@ -152,12 +152,12 @@ public class RedisBroadcast extends AbstractDistributionSyncStrategy {
 	}
 
 	@Override
-	protected void broadcast(DistributionSyncDTO message) throws SyncFailedException {
+	protected void broadcast(DistributionSyncDTO message) throws SyncFailedCacheException {
 		byte[] bytes = SERIALIZER.serialize(message);
 		try {
 			redisExecutor.publish(SUB_CHANNEL, bytes);
 		} catch (Exception e) {
-			throw new SyncFailedException("redis publish error", e);
+			throw new SyncFailedCacheException("redis publish error", e);
 		}
 	}
 

@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import io.github.icodegarden.commons.lang.tuple.Tuple3;
 import io.github.icodegarden.wing.SpaceCalcableCacher;
-import io.github.icodegarden.wing.common.EnvException;
+import io.github.icodegarden.wing.common.EnvCacheException;
 import io.github.icodegarden.commons.lang.serialization.Deserializer;
 import io.github.icodegarden.commons.lang.serialization.JavaDeserializer;
 import io.github.icodegarden.commons.lang.serialization.JavaSerializer;
@@ -69,7 +69,7 @@ public abstract class DirectMemoryCacher implements SpaceCalcableCacher {
 			}
 			return null;
 		} catch (NumberFormatException | ClassNotFoundException | NoSuchMethodException | SecurityException e) {
-			throw new EnvException("get " + claName + " cleaner ex", e);
+			throw new EnvCacheException("get " + claName + " cleaner ex", e);
 		}
 	}
 
@@ -106,7 +106,7 @@ public abstract class DirectMemoryCacher implements SpaceCalcableCacher {
 				log.debug("Direct Memory size:{} was freed", byteBuffer.capacity());
 			}
 		} catch (Exception e) {
-			throw new EnvException("freeMemory use cleaner ex", e);
+			throw new EnvCacheException("freeMemory use cleaner ex", e);
 		}
 		return true;
 	}

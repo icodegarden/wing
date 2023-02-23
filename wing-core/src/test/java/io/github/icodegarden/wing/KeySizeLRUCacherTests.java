@@ -12,7 +12,7 @@ import io.github.icodegarden.commons.lang.tuple.Tuple3;
 import io.github.icodegarden.commons.lang.tuple.Tuples;
 import io.github.icodegarden.wing.KeySizeLRUCacher;
 import io.github.icodegarden.wing.SpaceSizeLRUCacher;
-import io.github.icodegarden.wing.common.ArgumentException;
+import io.github.icodegarden.wing.common.ArgumentCacheException;
 import io.github.icodegarden.wing.java.DefaultDirectMemoryCacher;
 import io.github.icodegarden.wing.java.DirectMemoryCacher;
 import io.github.icodegarden.wing.java.HeapMemoryCacher;
@@ -46,7 +46,7 @@ public class KeySizeLRUCacherTests {
 		try{
 			cacher.set(Arrays.asList(Tuples.of(key, v, expireSeconds),Tuples.of(key2, v2, expireSeconds)));
 			throw new RuntimeException("expect IllegalArgumentException");
-		}catch (ArgumentException e) {
+		}catch (ArgumentCacheException e) {
 			assertEquals("maxKeySize:1 <(lt) request key size:2", e.getMessage());
 		}
 	}

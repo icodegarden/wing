@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.icodegarden.wing.common.RejectedRequestException;
+import io.github.icodegarden.wing.common.RejectedCacheException;
 import io.github.icodegarden.wing.protect.BlackListFilter;
 
 /**
@@ -33,7 +33,7 @@ public class BlackListFilterTests {
 		try{
 			filter.doFilter(key);
 			throw new AssertionError("期望异常");
-		}catch (RejectedRequestException e) {
+		}catch (RejectedCacheException e) {
 			assertEquals(filter, e.getRejector());
 			assertEquals("request key:" + key + " reject by black list", e.getReason());
 		}

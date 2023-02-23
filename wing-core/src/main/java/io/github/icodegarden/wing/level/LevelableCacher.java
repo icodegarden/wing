@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import io.github.icodegarden.commons.lang.tuple.Tuple3;
 import io.github.icodegarden.wing.Cacher;
-import io.github.icodegarden.wing.common.ArgumentException;
+import io.github.icodegarden.wing.common.ArgumentCacheException;
 import io.github.icodegarden.wing.distribution.DistributedCacher;
 
 /**
@@ -30,16 +30,16 @@ public class LevelableCacher implements Cacher {
 	public LevelableCacher(List<Cacher> ordered, SetOfFromStrategy setOfFromStrategy,
 			OutOfLimitStrategy outOfLimitStrategy, GetOfUpgradeStrategy upgradeStrategy) {
 		if (ordered == null || ordered.isEmpty()) {
-			throw new ArgumentException("ordered must not empty");
+			throw new ArgumentCacheException("ordered must not empty");
 		}
 		if (setOfFromStrategy == null) {
-			throw new ArgumentException(SetOfFromStrategy.class.getName() + " must not null");
+			throw new ArgumentCacheException(SetOfFromStrategy.class.getName() + " must not null");
 		}
 		if (outOfLimitStrategy == null) {
-			throw new ArgumentException(OutOfLimitStrategy.class.getName() + " must not null");
+			throw new ArgumentCacheException(OutOfLimitStrategy.class.getName() + " must not null");
 		}
 		if (upgradeStrategy == null) {
-			throw new ArgumentException(GetOfUpgradeStrategy.class.getName() + " must not null");
+			throw new ArgumentCacheException(GetOfUpgradeStrategy.class.getName() + " must not null");
 		}
 		level = Level.of(ordered);
 		this.setOfFromStrategy = setOfFromStrategy;

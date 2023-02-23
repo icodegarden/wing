@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.icodegarden.wing.common.RejectedRequestException;
+import io.github.icodegarden.wing.common.RejectedCacheException;
 import io.github.icodegarden.wing.protect.WhiteListFilter;
 
 /**
@@ -33,7 +33,7 @@ public class WhiteListFilterTests {
 		try{
 			filter.doFilter(key2);
 			throw new AssertionError("期望异常");
-		}catch (RejectedRequestException e) {
+		}catch (RejectedCacheException e) {
 			assertEquals(filter, e.getRejector());
 			assertEquals("request key:" + key2 + " reject by white list", e.getReason());
 		}

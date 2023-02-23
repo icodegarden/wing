@@ -3,7 +3,7 @@ package io.github.icodegarden.wing.protect;
 import java.util.Collection;
 import java.util.function.Predicate;
 
-import io.github.icodegarden.wing.common.RejectedRequestException;
+import io.github.icodegarden.wing.common.RejectedCacheException;
 
 /**
  * @author Fangfang.Xu
@@ -19,9 +19,9 @@ public class BlackListFilter extends ShouldFilter {
 	}
 
 	@Override
-	protected void shouldDoFilter(String key) throws RejectedRequestException {
+	protected void shouldDoFilter(String key) throws RejectedCacheException {
 		if (blacks.contains(key)) {
-			throw new RejectedRequestException(this, "request key:" + key + " reject by black list");
+			throw new RejectedCacheException(this, "BlackList Not Allowed cache key:" + key);
 		}
 	}
 }

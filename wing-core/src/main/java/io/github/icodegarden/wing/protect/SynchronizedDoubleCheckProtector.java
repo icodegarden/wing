@@ -1,6 +1,6 @@
 package io.github.icodegarden.wing.protect;
 
-import io.github.icodegarden.wing.common.RejectedRequestException;
+import io.github.icodegarden.wing.common.RejectedCacheException;
 
 /**
  * 
@@ -22,7 +22,7 @@ public class SynchronizedDoubleCheckProtector implements Protector {
 	}
 
 	@Override
-	public <V> V doProtector(ProtectorChain<V> chain) throws RejectedRequestException {
+	public <V> V doProtector(ProtectorChain<V> chain) throws RejectedCacheException {
 		String key = chain.key();
 		synchronized (synchronizer(key)) {
 			V v = chain.fromCache();

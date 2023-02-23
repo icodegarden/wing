@@ -3,7 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.icodegarden.wing.common.RejectedRequestException;
+import io.github.icodegarden.wing.common.RejectedCacheException;
 import io.github.icodegarden.wing.protect.RegexFilter;
 
 /**
@@ -32,7 +32,7 @@ public class RegexFilterTests {
 		try{
 			regexFilter.doFilter(key2);
 			throw new AssertionError("期望异常");
-		}catch (RejectedRequestException e) {
+		}catch (RejectedCacheException e) {
 			assertEquals(regexFilter, e.getRejector());
 			assertEquals("request key:" + key2 + " reject by regex:" + regex, e.getReason());
 		}

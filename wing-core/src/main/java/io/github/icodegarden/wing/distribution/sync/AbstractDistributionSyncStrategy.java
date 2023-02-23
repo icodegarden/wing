@@ -3,7 +3,7 @@ package io.github.icodegarden.wing.distribution.sync;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.github.icodegarden.wing.common.SyncFailedException;
+import io.github.icodegarden.wing.common.SyncFailedCacheException;
 import io.github.icodegarden.wing.distribution.DistributedCacher;
 
 /**
@@ -26,7 +26,7 @@ public abstract class AbstractDistributionSyncStrategy implements DistributionSy
 	}
 
 	@Override
-	public <V> void onSet(String key, V v, int expireSeconds) throws SyncFailedException {
+	public <V> void onSet(String key, V v, int expireSeconds) throws SyncFailedCacheException {
 		OnSet onSet = new OnSet();
 		onSet.setApplicationName(distributionSyncCacher.getApplicationName());
 		onSet.setApplicationInstanceId(distributionSyncCacher.getApplicationInstanceId());
@@ -42,7 +42,7 @@ public abstract class AbstractDistributionSyncStrategy implements DistributionSy
 	}
 
 	@Override
-	public void onRemove(String key) throws SyncFailedException {
+	public void onRemove(String key) throws SyncFailedCacheException {
 		OnRemove onRemove = new OnRemove();
 		onRemove.setApplicationName(distributionSyncCacher.getApplicationName());
 		onRemove.setApplicationInstanceId(distributionSyncCacher.getApplicationInstanceId());
@@ -55,7 +55,7 @@ public abstract class AbstractDistributionSyncStrategy implements DistributionSy
 		}
 	}
 
-	protected abstract void broadcast(DistributionSyncDTO message) throws SyncFailedException;
+	protected abstract void broadcast(DistributionSyncDTO message) throws SyncFailedCacheException;
 
 	protected void receiveSync(DistributionSyncDTO distributionSyncDTO) {
 		if (log.isInfoEnabled()) {

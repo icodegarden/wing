@@ -3,7 +3,7 @@ package io.github.icodegarden.wing;
 import java.util.List;
 
 import io.github.icodegarden.commons.lang.tuple.Tuple3;
-import io.github.icodegarden.wing.common.ArgumentException;
+import io.github.icodegarden.wing.common.ArgumentCacheException;
 import io.github.icodegarden.wing.metrics.SpaceMetricsCacher;
 
 /**
@@ -27,7 +27,7 @@ public class SpaceSizeLRUCacher extends CapacityLimitedCacher {
 		long needSpace = kvts.stream().mapToLong(kvt -> cacher.spaceSize(kvt.getT2())).sum();
 		if (maxBytes < needSpace) {
 			//用户有义务设置足够大的maxBytes
-			throw new ArgumentException("maxBytes:" + maxBytes + " <(lt) request key needSpace:" + needSpace);
+			throw new ArgumentCacheException("maxBytes:" + maxBytes + " <(lt) request key needSpace:" + needSpace);
 		}
 		
 		//已存在+请求 > 最大设置
